@@ -13,6 +13,7 @@ contract TokenFarm is Ownable {
     // mapping token address -> staker address -> amount
     mapping(address => mapping(address => uint256)) public stakingBalance;
     mapping(address => uint256) public uniqueTokensStaked;
+    mapping(address => address) public tokenPriceFeedMapping;
     address[] public stakers;
     address[] public allowedTokens;
     IERC20 public dappToken;
@@ -36,6 +37,44 @@ contract TokenFarm is Ownable {
             dappToken.transfer(recipient, amount);
         }
     }
+    // total value all assets combine
+    function getUserTotalValue(address _user) public view returns (uint256) {
+        //we not airdrop it make user cost gas fee
+        uint256 totalValue = 0;
+        require(uniqueTokensStaked[_user] > 0, "No tokens staked!");
+        for (
+            uint256 allowedTokensIndex = 0;
+            allowedTokensIndex < allowedTokens.length;
+            allowedTokensIndex++
+        ) {
+            totalValue =
+                totalValue +
+                getUserSingleTokenValue(
+                    _user,
+                    allowedTokens[allowedTokensIndex]
+                );
+        }
+    }
+
+    function getUserSingleTokenValue(
+        address _user,
+        address _token
+    ) public view returns (uint256) {
+        // stake 1 ETH = $2000 , we must return 2000. if stake 20 DAI we return 20
+        if (uniqueTokensStaked[_user] <= 0) {
+            return 0;
+        }
+        // we need price of the token * stakingBalance[_token][user]
+        getTokenValue(_token)
+         else {}
+    }
+
+    function getTokenValue(address _token) public view returns (uint256) {
+        // priceFeedAddress
+
+        
+    }
+
     function stakeTokens(uint256 _amount, address _token) public {
         // what token can they stake
         // how much can they stake
