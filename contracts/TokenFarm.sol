@@ -2,7 +2,9 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+
 contract TokenFarm is Ownable {
     // stake token
     // unstake token
@@ -22,6 +24,14 @@ contract TokenFarm is Ownable {
     constructor(address _dappTokenAddress) public {
         dappToken = IERC20(_dappTokenAddress);
     }
+
+    function setPriceFeedContract(
+        address _token,
+        address _priceFeed
+    ) public onlyOwner {
+        tokenPriceFeedMapping[_token] = _priceFeed;
+    }
+    // 4. Issue Token
     function issueTokens() public onlyOwner {
         // Issue tokens to all stakers
         for (
@@ -34,10 +44,10 @@ contract TokenFarm is Ownable {
             // send them a token reward
             // based on their total value locked
 
-            dappToken.transfer(recipient, amount);
+            dappToken.transfer(recipient, userTotalValue);
         }
     }
-    // total value all assets combine
+    // 5. Get Total value of user token
     function getUserTotalValue(address _user) public view returns (uint256) {
         //we not airdrop it make user cost gas fee
         uint256 totalValue = 0;
@@ -54,8 +64,10 @@ contract TokenFarm is Ownable {
                     allowedTokens[allowedTokensIndex]
                 );
         }
+        return totalValue;
     }
 
+    // 6. Get single token value of user
     function getUserSingleTokenValue(
         address _user,
         address _token
@@ -65,16 +77,23 @@ contract TokenFarm is Ownable {
             return 0;
         }
         // we need price of the token * stakingBalance[_token][user]
-        getTokenValue(_token)
-         else {}
+        (uint256 price, uint256 decimals) = getTokenValue(_token);
+        return ((stakingBalance[token][user] * price) / (10 ** decimals));
     }
-
-    function getTokenValue(address _token) public view returns (uint256) {
+    // 7. Get token value price feed
+    function getTokenValue(
+        address _token
+    ) public view returns (uint256, uint256) {
         // priceFeedAddress
-
-        
+        address priceFeedAddress = tokenPriceFeedMapping[_token];
+        AggregatorV3Interface priceFeed = AggregatorV3Interface(
+            priceFeedAddress
+        );
+        (, int256 price, , , ) = priceFeed.latestRoundData();
+        uint256 decimals = uint256(priceFeed.decimals());
+        return (uint256(price), decimals);
     }
-
+    // 1. Stake Token
     function stakeTokens(uint256 _amount, address _token) public {
         // what token can they stake
         // how much can they stake
@@ -90,16 +109,17 @@ contract TokenFarm is Ownable {
             stakers.push(msg.sender);
         }
     }
-
+    // 5. How many unique tokens user has, if has 1 we add to list
     function updateUniqueTokensStaked(address _user, address _token) internal {
         if (stakingBalance[_token][_user] <= 0) {
             uniqueTokenStaked[_user] = uniqueTokenStaked[_user] + 1;
         }
     }
+    // 3. Allowed tokens
     function addAllowedTokens(address _token) public onlyOwner {
         allowedTokens.push(_token);
     }
-
+    // 2. Is token allowed
     function tokenIsAllowed(address _token) public returns (bool) {
         for (
             uint256 allowedTokensIndex = 0;
