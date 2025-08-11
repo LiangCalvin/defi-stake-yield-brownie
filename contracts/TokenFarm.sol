@@ -78,7 +78,7 @@ contract TokenFarm is Ownable {
         }
         // we need price of the token * stakingBalance[_token][user]
         (uint256 price, uint256 decimals) = getTokenValue(_token);
-        return ((stakingBalance[token][user] * price) / (10 ** decimals));
+        return ((stakingBalance[_token][_user] * price) / (10 ** decimals));
     }
     // 7. Get token value price feed
     function getTokenValue(
@@ -109,10 +109,19 @@ contract TokenFarm is Ownable {
             stakers.push(msg.sender);
         }
     }
+
+    // 8. Unstake Token
+    function unstakeTokens(address _token) public {
+        uint256 balance = stakingBalance[_token][msg.sender];
+        require(balance > 0, "Staking balance cannot be 0");
+        IERC20(_token).transfer(msg.sender, balance);
+        stakingBalance[_token][msg.sender] = 0;
+        uniqueTokensStaked[msg.sender] = uniqueTokensStaked[msg.sender] - 1;
+    }
     // 5. How many unique tokens user has, if has 1 we add to list
     function updateUniqueTokensStaked(address _user, address _token) internal {
         if (stakingBalance[_token][_user] <= 0) {
-            uniqueTokenStaked[_user] = uniqueTokenStaked[_user] + 1;
+            uniqueTokensStaked[_user] = uniqueTokensStaked[_user] + 1;
         }
     }
     // 3. Allowed tokens
