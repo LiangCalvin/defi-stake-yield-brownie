@@ -1,28 +1,55 @@
-import { useEthers } from "@usedapp/core"
-import helperConfig from "../helper-config.json"
+import { useEthers } from "@usedapp/core";
+import helperConfig from "../helper-config.json";
+import networkMapping from "../chain-info/deployments/map.json";
+import { constants } from "ethers";
+import brownieConfig from "../brownie-config.json";
+
+interface ContractAddresses {
+    DappToken: string[];
+    TokenFarm: string[];
+    [key: string]: string[]; // for any other contract names dynamically
+}
+
+interface NetworkMapping {
+    [chainId: string]: ContractAddresses;
+}
+
+const networkMappingTyped: NetworkMapping =
+    networkMapping as unknown as NetworkMapping;
 
 export const Main = () => {
-    // const { chainId } = useEthers()
     const { account, chainId } = useEthers();
-    // const networkName = chainId ? helperConfig[chainId] : "dev"
-    // const networkName = chainId
-    //     ? helperConfig[String(chainId) as keyof typeof helperConfig]
-    //     : "dev"
+
     const networkName = chainId
         ? helperConfig[String(chainId) as keyof typeof helperConfig]
-        : undefined;
+        : "dev";
 
-    console.log("account", account)
-    console.log("chain", chainId)
-    console.log("networkname", networkName)
-    // const dappTokenAddress
+    console.log("account", account);
+    console.log("chain", chainId);
+    console.log("networkname", networkName);
+    if (!account) {
+        return <p>Please connect your wallet</p>;
+    }
+
+    if (!chainId) {
+        return <p>Loading network info...</p>;
+    }
+    const dappTokenAddress = chainId
+        ? networkMappingTyped[String(chainId)]["DappToken"][0]
+        : constants.AddressZero;
+    const wethTokenAddress =
+        chainId && networkName
+            ? (brownieConfig["networks"] as any)[networkName]?.["weth_token"]
+            : constants.AddressZero;
+    const fauTokenAddress =
+        chainId && networkName
+            ? (brownieConfig["networks"] as any)[networkName]?.["fau_token"]
+            : constants.AddressZero;
     return (
         <div>
-            {account ? (
-                <p>Connected to {networkName} ({chainId})</p>
-            ) : (
-                <p>Please connect your wallet</p>
-            )}
+            <p>
+                Connected to {networkName} ({chainId})
+            </p>
         </div>
-    )
-}
+    );
+};
