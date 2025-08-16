@@ -6,16 +6,13 @@ import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
+import { WalletBalance } from './WalletBalance';
 
 interface YourWalletProps {
     supportedTokens: Array<Token>
 }
 
 export const YourWallet = ({ supportedTokens }: YourWalletProps) => {
-    // const [value, setValue] = React.useState('1');
-    //   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    //     setValue(newValue);
-    // };
     const [selectedTokenIndex, setSelectedTokenIndex] = useState<number>(0)
     const handleChange = (event: React.ChangeEvent<{}>, newValue: string) => {
         setSelectedTokenIndex(parseInt(newValue))
@@ -40,6 +37,7 @@ export const YourWallet = ({ supportedTokens }: YourWalletProps) => {
                                 <div>
                                     1. wallet balance
                                     2. big stake button
+                                    <WalletBalance token={supportedTokens[selectedTokenIndex]} />
                                 </div>
 
                             </TabPanel>
