@@ -79,7 +79,7 @@ export const Main = () => {
         <div>
             <YourWallet supportedTokens={supportedTokens} />
             <p>
-                Connected to {networkName} ({chainId})
+                {/* Connected to {networkName} ({chainId}) */}
             </p>
         </div>
     );

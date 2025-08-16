@@ -17,7 +17,7 @@ function App() {
     <DAppProvider config={config} >
       <Header />
       <Container maxWidth='md'>
-        Hi
+
       </Container>
       <Main />
     </DAppProvider>
