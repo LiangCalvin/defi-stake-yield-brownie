@@ -1,15 +1,28 @@
-
-
-
+import { useEthers } from "@usedapp/core"
+import helperConfig from "../helper-config.json"
 
 export const Main = () => {
-    // show token value
-    // get address of different tokens
-    // get balance of user wallet
-    // send yaml to src folder
-    // send build folder 
+    // const { chainId } = useEthers()
+    const { account, chainId } = useEthers();
+    // const networkName = chainId ? helperConfig[chainId] : "dev"
+    // const networkName = chainId
+    //     ? helperConfig[String(chainId) as keyof typeof helperConfig]
+    //     : "dev"
+    const networkName = chainId
+        ? helperConfig[String(chainId) as keyof typeof helperConfig]
+        : undefined;
 
-    // return (
-
-    // )
+    console.log("account", account)
+    console.log("chain", chainId)
+    console.log("networkname", networkName)
+    // const dappTokenAddress
+    return (
+        <div>
+            {account ? (
+                <p>Connected to {networkName} ({chainId})</p>
+            ) : (
+                <p>Please connect your wallet</p>
+            )}
+        </div>
+    )
 }
