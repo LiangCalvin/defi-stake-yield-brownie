@@ -6,7 +6,7 @@ import brownieConfig from "../brownie-config.json";
 import dapp from "../dapp.png"
 import eth from "../eth.png"
 import dai from "../dai.png"
-
+import { YourWallet } from "./yourWallet/yourWallet";
 interface ContractAddresses {
     DappToken: string[];
     TokenFarm: string[];
@@ -77,7 +77,7 @@ export const Main = () => {
 
     return (
         <div>
-            {/* <YourWallet supportedTokens={supportedTokens} /> */}
+            <YourWallet supportedTokens={supportedTokens} />
             <p>
                 Connected to {networkName} ({chainId})
             </p>
