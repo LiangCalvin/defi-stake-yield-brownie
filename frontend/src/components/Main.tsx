@@ -17,7 +17,7 @@ interface NetworkMapping {
     [chainId: string]: ContractAddresses;
 }
 
-const networkMappingTyped: NetworkMapping =
+export const networkMappingTyped: NetworkMapping =
     networkMapping as unknown as NetworkMapping;
 
 export type Token = {
