@@ -1,7 +1,7 @@
 import { useEthers, useTokenBalance } from "@usedapp/core"
 import { Token } from "../Main"
 import { formatUnits } from "ethers/lib/utils"
-import { BalanceMsg } from "./BalanceMsg";
+import { BalanceMsg } from "../BalanceMsg";
 
 // Extend the Window interface to include ethereum
 declare global {
@@ -26,7 +26,7 @@ export const WalletBalance = ({ token }: WalletBalanceProps) => {
     console.log("Token Balance:", tokenBalance)
     return (
         <div>
-            <p>{name} Balance: {tokenBalance ? formatUnits(tokenBalance, 18) : "Loading..."}</p>
+            {/* <p>{name} Balance: {tokenBalance ? formatUnits(tokenBalance, 18) : "Loading..."}</p> */}
             <BalanceMsg
                 label={`Your un-staked ${name} balance`}
                 tokenImgSrc={image}
