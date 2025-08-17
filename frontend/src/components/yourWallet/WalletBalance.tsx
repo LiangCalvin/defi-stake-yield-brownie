@@ -19,11 +19,11 @@ export const WalletBalance = ({ token }: WalletBalanceProps) => {
     const { account } = useEthers()
     const tokenBalance = useTokenBalance(address, account)
     const formattedTokenBalance: number = tokenBalance ? parseFloat(formatUnits(tokenBalance, 18)) : 0
-    console.log("tokenbal", tokenBalance?.toString() ?? "loading...")
-    console.log("Account:", account)
-    console.log("Token Address:", address)
-    console.log("Chain ID:", window.ethereum?.chainId)
-    console.log("Token Balance:", tokenBalance)
+    // console.log("tokenbal", tokenBalance?.toString() ?? "loading...")
+    // console.log("Account:", account)
+    // console.log("Token Address:", address)
+    // console.log("Chain ID:", window.ethereum?.chainId)
+    // console.log("Token Balance:", tokenBalance)
     return (
         <div>
             {/* <p>{name} Balance: {tokenBalance ? formatUnits(tokenBalance, 18) : "Loading..."}</p> */}
