@@ -15,17 +15,18 @@ export const StakeForm = ({ token }: StakeFormProps) => {
     const { account } = useEthers()
     const tokenBalance = useTokenBalance(tokenAddress, account)
     const formattedTokenBalance: number = tokenBalance ? parseFloat(formatUnits(tokenBalance, 18)) : 0
-    const [loading, setLoading] = React.useState(true);
+    // const [loading, setLoading] = React.useState(true);
     const [amount, setAmount] = useState<number | string | Array<number | string>>(0)
 
-    function handleClick() {
-        setLoading(true);
-    }
+    // function handleClick() {
+    //     setLoading(true);
+    // }
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newAmount = event.target.value === "" ? "" : Number(event.target.value)
         setAmount(newAmount)
         console.log("new amount", newAmount)
+        console.log("amount", amount)
     }
 
     return (
@@ -33,7 +34,7 @@ export const StakeForm = ({ token }: StakeFormProps) => {
             <TextField onChange={handleInputChange} id="standard-basic" label="please fill amount" variant="standard" />
             <Button
                 size="small"
-                onClick={handleClick}
+                // onClick={handleClick}
                 loadingPosition="end"
                 variant="contained"
             >
