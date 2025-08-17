@@ -9,7 +9,7 @@ export const useStakeTokens = (tokenAddress: string) => {
   const { chainId } = useEthers();
   const { abi } = TokenFarm;
   const tokenFarmAddress = chainId
-    ? networkMappingTyped[String(chainId)]["DappToken"][0]
+    ? networkMappingTyped[String(chainId)]["TokenFarm"][0]
     : constants.AddressZero;
 
   //approve
@@ -29,7 +29,6 @@ export const useStakeTokens = (tokenAddress: string) => {
   const approve = (amount: string) => {
     return approveErc20Send(tokenFarmAddress, amount);
   };
-  //   const [state, setState] = useState(approveErc20State);
 
   return { approve, approveErc20State };
 };
