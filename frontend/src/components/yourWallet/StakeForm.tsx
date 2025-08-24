@@ -31,10 +31,10 @@ export const StakeForm = ({ token }: StakeFormProps) => {
         console.log("amount", amount)
     }
 
-    const { approve, approveErc20State } = useStakeTokens(tokenAddress)
+    const { approveAndStake, approveErc20State } = useStakeTokens(tokenAddress)
     const handleStakeSubmit = () => {
         const amountAsWei = utils.parseEther(amount.toString())
-        return approve(amountAsWei.toString())
+        return approveAndStake(amountAsWei.toString())
     }
 
     return (
