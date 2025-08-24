@@ -10,6 +10,10 @@ const config = {
   readOnlyChainId: ChainId.Sepolia,
   readOnlyUrls: {
     [ChainId.Sepolia]: 'https://sepolia.infura.io/v3/761d2363bdb147f4babc971dd1a4c921'
+  },
+  notifications: {
+    expirationPeriod: 1000,
+    checkInterval: 1000
   }
 };
 function App() {
